@@ -19,7 +19,7 @@ class MedicalRecordResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Medical Records';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -90,21 +90,18 @@ class MedicalRecordResource extends Resource
                 Forms\Components\Section::make('Record Details')
                     ->description('Basic classification of this medical record.')
                     ->schema([
-                        Forms\Components\Select::make('record_type')
+                        Forms\Components\Select::make('record_type_id')
                             ->label('Record Type')
+                            ->relationship(
+                                name: 'recordType',   // MedicalRecord belongsTo RecordType
+                                titleAttribute: 'label'
+                            )
+                            ->searchable()
+                            ->preload()
                             ->required()
-                            ->options([
-                                'consultation' => 'Consultation Note',
-                                'progress' => 'Progress Note',
-                                'discharge' => 'Discharge Summary',
-                                'procedure' => 'Procedure Note',
-                                'lab' => 'Lab Report',
-                                'death' => 'Death Record',
-                                'birth' => 'Birth Record',
-                                'referral' => 'Referral Record',
-                            ])
                             ->placeholder('Select record type')
                             ->helperText('Type of clinical documentation'),
+
 
                         Forms\Components\TextInput::make('title')
                             ->label('Record Title')
@@ -170,10 +167,9 @@ class MedicalRecordResource extends Resource
                             ->placeholder('Select CPT code')
                             ->helperText('Procedure or service code (CPT)'),
 
-                        Forms\Components\Select::make('authored_by')
-                            ->label('Authored By')
-                            ->hidden()
-                            ->default(fn() => auth()->id()),
+                        Forms\Components\Hidden::make('authored_by')
+                            ->default(fn() => auth()->id())
+                            ->dehydrated(true),
 
                     ])
                     ->columns(2),
@@ -187,24 +183,25 @@ class MedicalRecordResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('uuid')
-                    ->label('UUID'),
-                Tables\Columns\TextColumn::make('organization_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('visit_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('record_type')
+                Tables\Columns\TextColumn::make('recordType.label')
+                    ->placeholder("---")
                     ->searchable(),
+                Tables\Columns\TextColumn::make('patient.full_name')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('title')
+                    ->placeholder("---")
                     ->searchable(),
-                Tables\Columns\TextColumn::make('authored_by')
+                Tables\Columns\TextColumn::make('authoredBy.name')
+                    ->placeholder("---")
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('icd10_code')
+                    ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('cpt_code')
+                    ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -218,9 +215,7 @@ class MedicalRecordResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('patient_id')
-                    ->numeric()
-                    ->sortable(),
+
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

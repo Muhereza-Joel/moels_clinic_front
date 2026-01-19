@@ -18,7 +18,7 @@ class MedicalRecord extends BaseModel
         'organization_id',
         'visit_id',
         'patient_id',
-        'record_type',
+        'record_type_id',
         'title',
         'content',
         'data_json',
@@ -51,6 +51,11 @@ class MedicalRecord extends BaseModel
         return $this->belongsTo(Patient::class);
     }
 
+    public function recordType()
+    {
+        return $this->belongsTo(RecordType::class, 'record_type_id');
+    }
+
     public function authoredBy()
     {
         return $this->belongsTo(User::class, 'authored_by');
@@ -69,11 +74,11 @@ class MedicalRecord extends BaseModel
     // Scopes
     public function scopeDiagnoses($query)
     {
-        return $query->where('record_type', 'diagnosis');
+        return $query->where('record_type_id', 'diagnosis');
     }
 
     public function scopeProgressNotes($query)
     {
-        return $query->where('record_type', 'progress_note');
+        return $query->where('record_type_id', 'progress_note');
     }
 }
