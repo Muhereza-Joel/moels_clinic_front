@@ -23,6 +23,11 @@ class Organization extends BaseModel
         'is_active' => 'boolean'
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
     // Relationships
     public function users()
     {
