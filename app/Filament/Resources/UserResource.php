@@ -62,12 +62,12 @@ class UserResource extends Resource
                             ->relationship(
                                 name: 'roles',
                                 titleAttribute: 'name',
-                                modifyQueryUsing: fn($query) => $query->where('name', '!=', 'root')
+                                modifyQueryUsing: fn($query) => $query->where('name', '!=', 'super_admin')
                             )
                             ->preload()
                             ->placeholder("Select prevelage for the user")
                             ->searchable()
-                            ->multiple(true) // Explicit: one role per user
+                            ->multiple(false) // Explicit: one role per user
                             ->required(),
 
                         Forms\Components\TextInput::make('password')
