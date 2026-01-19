@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToOrganization;
+use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CptCode extends Model
+class CptCode extends BaseModel
 {
+
+    use HasFactory, SoftDeletes, HasUuid, BelongsToOrganization;
+
     protected $table = 'cpt_codes';
 
     protected $fillable = [
         'uuid',
+        'organization_id',
         'code',
         'description',
         'category',
@@ -20,7 +28,10 @@ class CptCode extends Model
         'is_active' => 'boolean'
     ];
 
-    public $timestamps = false;
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 
     // Relationships
     public function medicalRecords()
