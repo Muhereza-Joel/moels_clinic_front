@@ -32,7 +32,6 @@ class RecordTypeResource extends Resource
                         Forms\Components\TextInput::make('code')
                             ->label('Record Type Code')
                             ->required()
-                            ->unique(ignoreRecord: true)
                             ->placeholder('e.g. consultation, progress_note')
                             ->helperText('System identifier (lowercase, no spaces)')
                             ->maxLength(50)
