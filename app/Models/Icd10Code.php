@@ -10,6 +10,7 @@ class Icd10Code extends Model
 
     protected $fillable = [
         'uuid',
+        'organization_id',
         'code',
         'description',
         'chapter',
