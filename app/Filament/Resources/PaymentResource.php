@@ -98,9 +98,10 @@ class PaymentResource extends Resource
                             ->maxLength(255)
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Optional: MoMo or bank transaction reference' : null),
 
-                        Forms\Components\Hidden::make('recorded_by')
-                            ->hidden()
-                            ->default(fn() => auth()->id()),
+                        Forms\Components\Hidden::make('authored_by')
+                            ->default(fn() => auth()->id())
+                            ->dehydrated(true),
+
                     ])
                     ->columns(2),
             ]);
