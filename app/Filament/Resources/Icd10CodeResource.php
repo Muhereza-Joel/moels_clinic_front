@@ -35,7 +35,6 @@ class Icd10CodeResource extends Resource
                         Forms\Components\TextInput::make('code')
                             ->label('ICD-10 Code')
                             ->required()
-                            ->unique(ignoreRecord: true)
                             ->placeholder('e.g. I10, E11.9, J18.9')
                             ->helperText('Official ICD-10 diagnosis code')
                             ->maxLength(10),

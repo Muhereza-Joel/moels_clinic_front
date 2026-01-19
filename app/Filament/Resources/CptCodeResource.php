@@ -35,7 +35,6 @@ class CptCodeResource extends Resource
                         Forms\Components\TextInput::make('code')
                             ->label('CPT Code')
                             ->required()
-                            ->unique(ignoreRecord: true)
                             ->placeholder('e.g. 99213, 93000')
                             ->helperText('Official CPT procedure code')
                             ->maxLength(10),
