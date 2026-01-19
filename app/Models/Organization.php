@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Organization extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, HasUuid;
 
     protected $table = 'organizations';
 
