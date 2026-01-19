@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->foreignId('organization_id')->constrained('organizations')->onDelete('cascade');
-            $table->string('code')->unique(); // e.g. consultation, progress_note
+            $table->string('code'); // e.g. consultation, progress_note
             $table->string('label');          // e.g. Consultation Note
             $table->timestamps();
             $table->softDeletes();
