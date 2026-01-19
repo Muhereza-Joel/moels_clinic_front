@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToOrganization;
+use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Icd10Code extends Model
+class Icd10Code extends BaseModel
 {
+    use HasFactory, HasUuid, BelongsToOrganization;
+
     protected $table = 'icd10_codes';
 
     protected $fillable = [
@@ -21,8 +26,6 @@ class Icd10Code extends Model
     protected $casts = [
         'is_active' => 'boolean'
     ];
-
-    public $timestamps = false;
 
     // Relationships
     public function medicalRecords()

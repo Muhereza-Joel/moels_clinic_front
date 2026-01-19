@@ -14,7 +14,7 @@ return new class extends Migration
                 ->constrained()
                 ->onDelete('cascade')
                 ->after('id');
-
+            $table->timestamps();
             $table->softDeletes()->after('updated_at');
         });
     }
@@ -23,6 +23,7 @@ return new class extends Migration
     {
         Schema::table('icd10_codes', function (Blueprint $table) {
             $table->dropConstrainedForeignId('organization_id');
+            $table->dropTimestamps();
             $table->dropSoftDeletes();
         });
     }
