@@ -17,6 +17,7 @@ class MedicalRecord extends BaseModel
         'uuid',
         'organization_id',
         'visit_id',
+        'patient_id',
         'record_type',
         'title',
         'content',
