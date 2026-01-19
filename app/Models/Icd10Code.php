@@ -6,10 +6,11 @@ use App\Traits\BelongsToOrganization;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Icd10Code extends BaseModel
 {
-    use HasFactory, HasUuid, BelongsToOrganization;
+    use HasFactory, SoftDeletes, HasUuid, BelongsToOrganization;
 
     protected $table = 'icd10_codes';
 
