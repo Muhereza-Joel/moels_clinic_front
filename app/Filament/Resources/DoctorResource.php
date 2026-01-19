@@ -38,6 +38,7 @@ class DoctorResource extends Resource
                                 titleAttribute: 'name',
                                 modifyQueryUsing: fn($query) =>
                                 $query
+                                    ->where('organization_id', auth()->user()->organization_id)
                                     ->whereDoesntHave('roles', function ($q) {
                                         $q->where('name', 'super_admin');
                                     })

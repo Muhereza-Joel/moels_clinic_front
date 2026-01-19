@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Organization;
+use App\Services\TenantResolver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,19 +42,13 @@ trait BelongsToOrganization
          * Apply global organization scope.
          */
         static::addGlobalScope('organization', function (Builder $builder) {
-            // Never scope console operations
             if (app()->runningInConsole()) {
                 return;
             }
-
-            if (! Auth::check() || ! Auth::user()->organization_id) {
-                return;
+            $orgId = TenantResolver::get();
+            if ($orgId) {
+                $builder->where($builder->getModel()->getTable() . '.organization_id', $orgId);
             }
-
-            $builder->where(
-                $builder->getModel()->getTable() . '.organization_id',
-                Auth::user()->organization_id
-            );
         });
     }
 
@@ -70,11 +65,10 @@ trait BelongsToOrganization
      */
     public function scopeForCurrentOrganization(Builder $query): Builder
     {
-        if (Auth::check() && Auth::user()->organization_id) {
-            $query->where(
-                $this->getTable() . '.organization_id',
-                Auth::user()->organization_id
-            );
+        $orgId = TenantResolver::get();
+
+        if ($orgId) {
+            $query->where($this->getTable() . '.organization_id', $orgId);
         }
 
         return $query;
