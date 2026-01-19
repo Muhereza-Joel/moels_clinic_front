@@ -1,0 +1,196 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\VisitResource\Pages;
+use App\Filament\Resources\VisitResource\RelationManagers;
+use App\Models\Appointment;
+use App\Models\Doctor;
+use App\Models\Patient;
+use App\Models\Visit;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class VisitResource extends Resource
+{
+    protected static ?string $model = Visit::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 3;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Section::make('Visit Details')
+                    ->description(fn() => $form->getOperation() !== 'view' ? 'Record patient visit information.' : null)
+                    ->schema([
+
+                        // Appointment selection
+                        Forms\Components\Select::make('appointment_id')
+                            ->label('Appointment')
+                            ->relationship('appointment', 'id')
+                            ->getOptionLabelFromRecordUsing(
+                                fn(Appointment $record) =>
+                                $record->sequence . ' — ' . $record->patient->first_name . ' ' . $record->patient->last_name
+                            )
+                            ->searchable()
+                            ->preload()
+                            ->reactive() // allows auto-fill when selected
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $appointment = Appointment::with('patient', 'doctor')->find($state);
+
+                                if ($appointment) {
+                                    $set('patient_id', $appointment->patient_id);
+                                    $set('doctor_id', $appointment->doctor_id);
+                                }
+                            })
+                            ->placeholder('Select an appointment')
+                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Selecting an appointment will auto-fill patient and doctor.' : null),
+
+                        // Patient selection (auto-filled)
+                        Forms\Components\Select::make('patient_id')
+                            ->label('Patient')
+                            ->relationship('patient', 'id')
+                            ->getOptionLabelFromRecordUsing(fn(Patient $record) => $record->full_name)
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->native(false)
+                            ->placeholder('Select patient if not using appointment')
+                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Automatically filled when appointment is selected.' : null),
+
+                        // Doctor selection (auto-filled)
+                        Forms\Components\Select::make('doctor_id')
+                            ->label('Doctor')
+                            ->relationship('doctor', 'id')
+                            ->getOptionLabelFromRecordUsing(fn(Doctor $record) => $record->user->name)
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->native(false)
+                            ->placeholder('Select doctor if not using appointment')
+                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Automatically filled when appointment is selected.' : null),
+
+                        // Visit date
+                        Forms\Components\DateTimePicker::make('visit_date')
+                            ->label('Visit Date & Time')
+                            ->required()
+                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Date and time of the patient visit' : null),
+
+                        // Status with enum options
+                        Forms\Components\Select::make('status')
+                            ->label('Visit Status')
+                            ->options([
+                                'open' => 'Open',
+                                'finalized' => 'Finalized',
+                                'cancelled' => 'Cancelled',
+                            ])
+                            ->default('open')
+                            ->required()
+                            ->placeholder('Select visit status')
+                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Only allowed statuses: Open, Finalized, Cancelled' : null),
+
+                        // Chief complaint
+                        Forms\Components\Textarea::make('chief_complaint')
+                            ->label('Chief Complaint')
+                            ->rows(3)
+                            ->columnSpanFull()
+                            ->placeholder(fn() => $form->getOperation() !== 'view' ? 'Enter patient\'s main complaint or reason for visit' : null),
+
+                        // Triage data
+                        Forms\Components\KeyValue::make('triage_json')
+                            ->label('Triage / Observations')
+                            ->keyLabel('Observation')
+                            ->valueLabel('Value')
+                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Record triage measurements or observations (e.g., BP, temp, pulse)' : null),
+
+                    ])
+                    ->columns(2),
+            ]);
+    }
+
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+
+                Tables\Columns\TextColumn::make('appointment.sequence')
+                    ->numeric()
+                    ->placeholder("---")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('patient.full_name')
+                    ->numeric()
+                    ->placeholder("---")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('doctor.user.name')
+                    ->label('Doctor')
+                    ->placeholder("---")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('visit_date')
+                    ->dateTime()
+                    ->placeholder("---")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->placeholder("---")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                Tables\Filters\TrashedFilter::make(),
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListVisits::route('/'),
+            'create' => Pages\CreateVisit::route('/create'),
+            'view' => Pages\ViewVisit::route('/{record}'),
+            'edit' => Pages\EditVisit::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+}
