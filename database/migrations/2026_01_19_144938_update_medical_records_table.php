@@ -16,11 +16,12 @@ return new class extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
-            // Do NOT touch visit_id again — it already has a constraint
-
-            // Change record_type to varchar with CHECK constraint
+            // Change record_type to varchar
             $table->string('record_type')->change();
         });
+
+        // Ensure no duplicate constraint
+        DB::statement("ALTER TABLE medical_records DROP CONSTRAINT IF EXISTS record_type_check");
 
         // Add CHECK constraint for allowed record types
         DB::statement("
@@ -41,7 +42,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        // Drop the CHECK constraint
+        // Drop the CHECK constraint safely
         DB::statement("ALTER TABLE medical_records DROP CONSTRAINT IF EXISTS record_type_check");
 
         Schema::table('medical_records', function (Blueprint $table) {
@@ -52,6 +53,7 @@ return new class extends Migration
             $table->string('record_type')->change();
         });
 
+        // Restore the original constraint (only the initial set of values)
         DB::statement("
             ALTER TABLE medical_records
             ADD CONSTRAINT record_type_check
