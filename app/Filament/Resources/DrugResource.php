@@ -15,6 +15,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Enums\FiltersLayout;
+use App\Filament\Filters\DrugFilters;
+use Illuminate\Support\Str;
 
 class DrugResource extends Resource
 {
@@ -36,12 +39,6 @@ class DrugResource extends Resource
                  */
                     Forms\Components\Wizard\Step::make('Basic Info')
                         ->schema([
-                            Forms\Components\TextInput::make('drug_code')
-                                ->required()
-                                ->unique(ignoreRecord: true)
-                                ->maxLength(50)
-                                ->placeholder('DRG-001'),
-
                             Forms\Components\TextInput::make('name')
                                 ->required()
                                 ->maxLength(255),
@@ -235,28 +232,219 @@ class DrugResource extends Resource
                 Tables\Columns\TextColumn::make('drug_code')
                     ->placeholder("---")
                     ->searchable(),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Parent')
+                    ->numeric()
+                    ->placeholder('— top level —')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('subcategory.name')
+                    ->label('Child Category')
+                    ->numeric()
+                    ->placeholder('— child level —')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('form')
                     ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('strength')
                     ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('stock_quantity')
-                    ->numeric()
-                    ->placeholder("---")
-                    ->sortable(),
+                    ->label('Stock')
+                    ->sortable()
+                    ->placeholder('---')
+                    ->formatStateUsing(
+                        fn($state, $record) =>
+                        $state
+                            ? $state . ' ' . Str::ucfirst(
+                                Str::plural($record->unit_of_measure, $state)
+                            )
+                            : '---'
+                    ),
                 Tables\Columns\TextColumn::make('reorder_level')
                     ->placeholder("---")
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('unit_price')
+                    ->label('Unit Price')
+                    ->sortable()
+                    ->placeholder('---')
+                    ->formatStateUsing(
+                        fn($state, $record) =>
+                        $state
+                            ? number_format($state) . ' / ' . Str::ucfirst(
+                                Str::singular($record->unit_of_measure)
+                            )
+                            : '---'
+                    ),
+
+                Tables\Columns\IconColumn::make('is_active')
+                    ->boolean(),
+
+                Tables\Columns\TextColumn::make('generic_name')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('brand_name')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('manufacturer')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('therapeutic_class')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('pharmacologic_class')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('unit_of_measure')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('units_per_pack')
                     ->placeholder("---")
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_active')
+                Tables\Columns\TextColumn::make('reorder_quantity')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('maximum_stock')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('cost_price')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('selling_price')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('wholesale_price')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('batch_number')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('expiry_date')
+                    ->placeholder("---")
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('manufacture_date')
+                    ->placeholder("---")
+                    ->date()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('storage_condition')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('storage_location')
+                    ->placeholder("---")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('regulatory_number')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('requires_prescription')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('is_controlled_substance')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('controlled_schedule')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('is_dangerous_drug')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('primary_supplier_id')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('secondary_supplier_id')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('supplier_code')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('lead_time_days')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('minimum_order_quantity')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('maximum_order_quantity')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('monthly_usage')
+                    ->placeholder("---")
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('last_purchase_date')
+                    ->placeholder("---")
+                    ->date()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('last_dispensed_date')
+                    ->placeholder("---")
+                    ->date()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('is_discontinued')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('discontinued_date')
+                    ->placeholder("---")
+                    ->date()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('discontinued_reason')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('is_branded')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('is_generic')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -270,114 +458,12 @@ class DrugResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('generic_name')
-                    ->placeholder("---")
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('brand_name')
-                    ->placeholder("---")
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('manufacturer')
-                    ->placeholder("---")
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('category_id')
-                    ->label('Parent')
-                    ->numeric()
-                    ->placeholder('— top level —')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('subcategory_id')
-                    ->label('Child Category')
-                    ->numeric()
-                    ->placeholder('— child level —')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('therapeutic_class')
-                    ->placeholder("---")
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('pharmacologic_class')
-                    ->placeholder("---")
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('unit_of_measure')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('units_per_pack')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('reorder_quantity')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('maximum_stock')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('cost_price')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('selling_price')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('wholesale_price')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('batch_number')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('expiry_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('manufacture_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('storage_condition')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('storage_location')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('regulatory_number')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('requires_prescription')
-                    ->boolean(),
-                Tables\Columns\IconColumn::make('is_controlled_substance')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('controlled_schedule')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('is_dangerous_drug')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('primary_supplier_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('secondary_supplier_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('supplier_code')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('lead_time_days')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('minimum_order_quantity')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('maximum_order_quantity')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('monthly_usage')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('last_purchase_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('last_dispensed_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\IconColumn::make('is_discontinued')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('discontinued_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('discontinued_reason')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('is_branded')
-                    ->boolean(),
-                Tables\Columns\IconColumn::make('is_generic')
-                    ->boolean(),
             ])
             ->filters([
+                ...DrugFilters::all(), // spread operator flattens the array
                 Tables\Filters\TrashedFilter::make(),
-            ])
+            ], layout: FiltersLayout::Dropdown)
+            ->filtersFormColumns(2)
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),

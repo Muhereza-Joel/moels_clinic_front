@@ -140,6 +140,38 @@ class Drug extends BaseModel
         'alternative_names' => 'array',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function (Drug $drug) {
+            if (empty($drug->drug_code)) {
+                $drug->drug_code = self::generateDrugCode();
+            }
+        });
+    }
+
+
+
+
+    public static function generateDrugCode(): string
+    {
+        $suffixLength = 6;
+        $max = (36 ** $suffixLength) - 1;
+
+        do {
+            $rand = random_int(0, $max);
+            $base36 = base_convert($rand, 10, 36);
+
+            $suffix = strtoupper(
+                str_pad($base36, $suffixLength, '0', STR_PAD_LEFT)
+            );
+
+            $code = "DRG-{$suffix}";
+        } while (self::where('drug_code', $code)->exists());
+
+        return $code;
+    }
+
+
     /* -----------------------------------------------------------------
      |  Relationships
      | -----------------------------------------------------------------
@@ -157,7 +189,7 @@ class Drug extends BaseModel
 
     public function category()
     {
-        return $this->belongsTo(DrugCategory::class, 'category_id');
+        return $this->belongsTo(DrugCategory::class);
     }
 
     public function subcategory()
