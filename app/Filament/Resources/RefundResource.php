@@ -21,6 +21,7 @@ class RefundResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Sales Management';
+    protected static ?string $navigationLabel = 'Refunds on Invoices';
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -87,10 +88,11 @@ class RefundResource extends Resource
                 Forms\Components\Section::make('Additional Information')
                     ->description(fn() => $form->getOperation() !== 'view' ? 'Optional information related to the payment.' : null)
                     ->schema([
-                        Forms\Components\Textarea::make('reason')
+                        Forms\Components\RichEditor::make('reason')
                             ->label('Reason / Notes')
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Provide a reason or notes for this payment' : null)
                             ->placeholder('Optional notes...')
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull(),
 
                         Forms\Components\Hidden::make('recorded_by')

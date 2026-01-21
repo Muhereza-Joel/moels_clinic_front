@@ -122,6 +122,7 @@ class MedicalRecordResource extends Resource
                             ->label('Clinical Notes')
                             ->placeholder('Enter patient history, examination findings, assessment, and plan...')
                             ->helperText('Supports rich text formatting (WYSIWYG)')
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('data_json')

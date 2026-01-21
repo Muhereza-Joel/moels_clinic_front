@@ -22,6 +22,7 @@ class VisitResource extends Resource
     protected static ?string $model = Visit::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Patients Visits';
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
@@ -82,6 +83,7 @@ class VisitResource extends Resource
                         Forms\Components\DateTimePicker::make('visit_date')
                             ->label('Visit Date & Time')
                             ->required()
+                            ->default(now())
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Date and time of the patient visit' : null),
 
                         // Status with enum options
@@ -98,9 +100,9 @@ class VisitResource extends Resource
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Only allowed statuses: Open, Finalized, Cancelled' : null),
 
                         // Chief complaint
-                        Forms\Components\Textarea::make('chief_complaint')
+                        Forms\Components\RichEditor::make('chief_complaint')
                             ->label('Chief Complaint')
-                            ->rows(3)
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull()
                             ->placeholder(fn() => $form->getOperation() !== 'view' ? 'Enter patient\'s main complaint or reason for visit' : null),
 

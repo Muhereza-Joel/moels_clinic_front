@@ -38,7 +38,8 @@ class OrganizationResource extends Resource
 
                 Forms\Components\Section::make('Additional Details')
                     ->schema([
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\RichEditor::make('description')
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull(),
 
                         Forms\Components\Toggle::make('is_active')

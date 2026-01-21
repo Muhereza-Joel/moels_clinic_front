@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Filters\CreatedAtDateFilter;
 use App\Models\Visit;
 use App\Models\Patient;
 
@@ -21,6 +22,8 @@ class LabOrderResource extends Resource
     protected static ?string $model = LabOrder::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Lab Orders / Requests';
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
@@ -116,10 +119,10 @@ class LabOrderResource extends Resource
                 Forms\Components\Section::make('Clinical Notes')
                     ->schema([
 
-                        Forms\Components\Textarea::make('notes')
+                        Forms\Components\RichEditor::make('notes')
                             ->label('Additional notes to guide the laboratory tests')
                             ->placeholder('Any clinical notes or special instructions for the lab')
-                            ->rows(4)
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull(),
 
                     ]),
@@ -151,7 +154,18 @@ class LabOrderResource extends Resource
                 Tables\Columns\TextColumn::make('panel_code')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
+                    ->label('Status')
+                    ->badge()
+                    ->colors([
+                        'primary' => 'ordered',       // blue
+                        'warning' => 'in_progress',   // yellow
+                        'success' => 'completed',     // green
+                        'danger' => 'cancelled',      // red
+                    ])
+                    ->searchable()
+                    ->sortable(),
+
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -167,6 +181,7 @@ class LabOrderResource extends Resource
 
             ])
             ->filters([
+                CreatedAtDateFilter::make(),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([

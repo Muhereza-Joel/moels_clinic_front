@@ -52,10 +52,10 @@ class Icd10CodeResource extends Resource
                 Forms\Components\Section::make('Diagnosis Description')
                     ->description('Human-readable diagnosis name.')
                     ->schema([
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\RichEditor::make('description')
                             ->label('Diagnosis Description')
                             ->required()
-                            ->rows(3)
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->placeholder('e.g. Essential (primary) hypertension')
                             ->helperText('Official ICD-10 diagnosis wording')
                             ->columnSpanFull(),

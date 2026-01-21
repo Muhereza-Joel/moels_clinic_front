@@ -80,8 +80,9 @@ class PrescriptionResource extends Resource
 
                 Forms\Components\Section::make('Notes')
                     ->schema([
-                        Forms\Components\Textarea::make('notes')
+                        Forms\Components\RichEditor::make('notes')
                             ->placeholder('Additional prescription notes...')
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull(),
                     ]),
 

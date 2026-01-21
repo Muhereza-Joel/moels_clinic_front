@@ -20,7 +20,7 @@ class PatientResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Patient Register';
+    protected static ?string $navigationLabel = 'Patients Register';
     protected static ?int $navigationSort = 1;
 
 
@@ -81,8 +81,8 @@ class PatientResource extends Resource
                             ->placeholder('+256 7XX XXX XXX')
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Ugandan phone number' : null),
 
-                        Forms\Components\Textarea::make('address')
-                            ->rows(3)
+                        Forms\Components\RichEditor::make('address')
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull()
                             ->placeholder('Physical address'),
 
@@ -96,8 +96,8 @@ class PatientResource extends Resource
                 Forms\Components\Section::make('Additional Notes')
                     ->schema([
 
-                        Forms\Components\Textarea::make('notes')
-                            ->rows(4)
+                        Forms\Components\RichEditor::make('notes')
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull()
                             ->placeholder('Any important medical or administrative notes'),
 

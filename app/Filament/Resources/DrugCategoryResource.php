@@ -79,9 +79,9 @@ class DrugCategoryResource extends Resource
              */
                 Forms\Components\Section::make('Description')
                     ->schema([
-                        Forms\Components\Textarea::make('description')
-                            ->rows(3)
+                        Forms\Components\RichEditor::make('description')
                             ->columnSpanFull()
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->placeholder('Brief description of this category')
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Optional notes for internal use' : null),
                     ]),

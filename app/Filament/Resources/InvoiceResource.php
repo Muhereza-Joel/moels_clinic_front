@@ -140,9 +140,10 @@ class InvoiceResource extends Resource
                             ->label('Due At')
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Payment due date' : null),
 
-                        Forms\Components\Textarea::make('notes')
+                        Forms\Components\RichEditor::make('notes')
                             ->label('Notes')
                             ->columnSpanFull()
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->placeholder('Additional information about the invoice'),
 
                     ])

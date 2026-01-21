@@ -52,10 +52,10 @@ class CptCodeResource extends Resource
                 Forms\Components\Section::make('Procedure Description')
                     ->description('Human-readable explanation of the medical service.')
                     ->schema([
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\RichEditor::make('description')
                             ->label('Procedure Description')
                             ->required()
-                            ->rows(3)
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->placeholder('e.g. Office or outpatient visit for the evaluation and management of an established patient')
                             ->helperText('Official CPT description used for billing')
                             ->columnSpanFull(),

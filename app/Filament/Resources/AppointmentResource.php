@@ -100,9 +100,9 @@ class AppointmentResource extends Resource
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Current status of the appointment' : null),
 
                         // Reason / notes
-                        Forms\Components\Textarea::make('reason')
+                        Forms\Components\RichEditor::make('reason')
                             ->label('Reason / Notes')
-                            ->rows(3)
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'h2', 'h3', 'bulletList', 'orderedList'])
                             ->columnSpanFull()
                             ->placeholder('Optional notes about this appointment'),
 
