@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Filters\CreatedAtDateFilter;
 
 class InvoiceResource extends Resource
 {
@@ -154,6 +155,7 @@ class InvoiceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number')
                     ->searchable(),
@@ -208,6 +210,7 @@ class InvoiceResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                CreatedAtDateFilter::make(),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([

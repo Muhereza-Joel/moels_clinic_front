@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Filters\CreatedAtDateFilter;
 
 class PurchaseOrderItemResource extends Resource
 {
@@ -184,6 +185,7 @@ class PurchaseOrderItemResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('uuid')
                     ->label('UUID'),
@@ -235,6 +237,7 @@ class PurchaseOrderItemResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                CreatedAtDateFilter::make(),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
