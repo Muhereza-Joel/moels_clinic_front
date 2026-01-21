@@ -17,7 +17,7 @@ class DoctorResource extends Resource
 {
     protected static ?string $model = Doctor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
     protected static ?string $modelLabel = 'Staff';
     protected static ?string $navigationLabel = 'Clinic Team';
     protected static ?int $navigationSort = 7;

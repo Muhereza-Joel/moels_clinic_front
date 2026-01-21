@@ -21,7 +21,7 @@ class LabOrderResource extends Resource
 {
     protected static ?string $model = LabOrder::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-beaker';
     protected static ?string $navigationLabel = 'Lab Orders / Requests';
     protected static ?int $navigationSort = 4;
 

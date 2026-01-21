@@ -17,7 +17,7 @@ class DrugCategoryResource extends Resource
 {
     protected static ?string $model = DrugCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $navigationGroup = 'Inventory Management';
     protected static ?int $navigationSort = 1;
 

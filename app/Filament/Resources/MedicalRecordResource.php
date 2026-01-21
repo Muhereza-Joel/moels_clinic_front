@@ -18,7 +18,7 @@ class MedicalRecordResource extends Resource
 {
     protected static ?string $model = MedicalRecord::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-folder-open';
     protected static ?string $navigationGroup = 'Medical Records';
     protected static ?int $navigationSort = 2;
 

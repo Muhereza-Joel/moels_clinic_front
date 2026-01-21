@@ -23,7 +23,7 @@ class DrugResource extends Resource
 {
     protected static ?string $model = Drug::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
     protected static ?string $navigationGroup = 'Inventory Management';
     protected static ?string $navigationLabel = 'Drugs Inventory';
     protected static ?int $navigationSort = 3;

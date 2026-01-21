@@ -17,7 +17,7 @@ class CptCodeResource extends Resource
 {
     protected static ?string $model = CptCode::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard';
     protected static ?string $navigationGroup = 'Medical Records';
     protected static ?int $navigationSort = 4;
 
