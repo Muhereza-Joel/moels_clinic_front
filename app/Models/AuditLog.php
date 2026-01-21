@@ -2,11 +2,26 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToOrganization;
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AuditLog extends Model
 {
+    use HasUuid, BelongsToOrganization, SoftDeletes;
+
     protected $table = 'audit_logs';
+
+    public const ACTIONS = [
+        'create',
+        'update',
+        'delete',
+        'soft_delete',
+        'restore',
+        'status_change',
+        'force_delete',
+    ];
 
     protected $fillable = [
         'uuid',
@@ -17,12 +32,17 @@ class AuditLog extends Model
         'action',
         'changes_json',
         'ip_address',
+        'user_agent',
+        'url',
+        'http_method',
+        'severity',
+        'correlation_id',
     ];
 
     protected $casts = [
         'changes_json' => 'array',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'created_at'   => 'datetime',
+        'updated_at'   => 'datetime',
     ];
 
     // Relationships
