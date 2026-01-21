@@ -19,6 +19,7 @@ class AuditLogResource extends Resource
     protected static ?string $model = AuditLog::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 11;
 
     public static function form(Form $form): Form
     {
@@ -69,6 +70,9 @@ class AuditLogResource extends Resource
                     ->numeric()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('severity')
+                    ->label('Severity')
+                    ->badge()
+                    ->colors(['danger' => 'critical', 'warning' => 'warning', 'success' => 'info',])
                     ->searchable(),
                 Tables\Columns\TextColumn::make('entity_table')
                     ->searchable(),
