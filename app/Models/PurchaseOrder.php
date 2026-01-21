@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\PurchaseOrderStatus;
 use App\Enums\PaymentStatus;
 use App\Enums\DeliveryStatus;
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseOrder extends BaseModel
 {
-    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization;
+    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization, Auditable;
 
     protected $table = 'purchase_orders';
 

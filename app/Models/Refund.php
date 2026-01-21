@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Refund extends BaseModel
 {
-    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization;
+    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization, Auditable;
 
     protected $fillable = [
         'uuid',

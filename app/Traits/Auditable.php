@@ -62,8 +62,8 @@ trait Auditable
     protected function getAuditSeverity(string $action): string
     {
         return match ($action) {
-            'deleted', 'forceDeleted' => 'critical',
-            'restored'                => 'warning',
+            'delete', 'force_delete' => 'critical',
+            'restore'                => 'warning',
             default                   => 'info',
         };
     }

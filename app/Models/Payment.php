@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use App\Traits\DeductsPaymentFromInvoice;
 use App\Traits\HasUuid;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Payment extends BaseModel
 {
-    use HasFactory, SoftDeletes, HasUuid, BelongsToOrganization, DeductsPaymentFromInvoice;
+    use HasFactory, SoftDeletes, HasUuid, BelongsToOrganization, DeductsPaymentFromInvoice, Auditable;
 
     protected $table = 'payments';
 

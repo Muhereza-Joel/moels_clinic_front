@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DrugCategory extends Model
 {
-    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization;
+    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization, Auditable;
 
     protected $table = 'drug_categories';
 

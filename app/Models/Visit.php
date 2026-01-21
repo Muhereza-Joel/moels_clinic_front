@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Visit extends BaseModel
 {
-    use HasFactory, SoftDeletes, BelongsToOrganization;
+    use HasFactory, SoftDeletes, BelongsToOrganization, Auditable;
 
     protected $table = 'visits';
 

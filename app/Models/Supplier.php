@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SupplierRating;
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Supplier extends BaseModel
 {
-    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization;
+    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization, Auditable;
 
     protected $table = 'suppliers';
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use App\Traits\HasUuid;
 use App\Traits\RecalculatesInvoiceTotals;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends BaseModel
 {
-    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization, RecalculatesInvoiceTotals;
+    use HasFactory, HasUuid, SoftDeletes, BelongsToOrganization, RecalculatesInvoiceTotals, Auditable;
 
     protected $table = 'invoices';
 

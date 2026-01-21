@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Patient extends BaseModel
 {
-    use HasFactory, BelongsToOrganization, SoftDeletes;
+    use HasFactory, BelongsToOrganization, SoftDeletes, Auditable;
 
     protected $table = 'patients';
 

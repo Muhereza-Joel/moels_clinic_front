@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Organization extends BaseModel
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid, Auditable;
 
     protected $table = 'organizations';
 
