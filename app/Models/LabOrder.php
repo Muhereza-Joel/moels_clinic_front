@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
+use App\Traits\BelongsToOrganization;
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LabOrder extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, HasUuid, BelongsToOrganization, Auditable;
 
     protected $table = 'lab_orders';
 
@@ -14,6 +18,7 @@ class LabOrder extends BaseModel
         'uuid',
         'organization_id',
         'visit_id',
+        'patient_id',
         'ordered_by',
         'order_date',
         'panel_code',
@@ -25,6 +30,11 @@ class LabOrder extends BaseModel
         'order_date' => 'datetime'
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
     // Relationships
     public function organization()
     {
@@ -34,6 +44,11 @@ class LabOrder extends BaseModel
     public function visit()
     {
         return $this->belongsTo(Visit::class);
+    }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
     }
 
     public function orderedBy()
