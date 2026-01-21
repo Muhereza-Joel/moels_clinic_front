@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
+use App\Traits\BelongsToOrganization;
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LabResult extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, HasUuid, BelongsToOrganization, SoftDeletes, Auditable;
 
     protected $table = 'lab_results';
 
     protected $fillable = [
         'uuid',
+        'organization_id',
         'lab_order_id',
         'analyte_code',
         'value_text',
@@ -29,6 +34,12 @@ class LabResult extends BaseModel
     ];
 
     // Relationships
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
     public function labOrder()
     {
         return $this->belongsTo(LabOrder::class);

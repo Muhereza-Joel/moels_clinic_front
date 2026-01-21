@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LabOrderResource\Pages;
 use App\Filament\Resources\LabOrderResource\RelationManagers;
+use App\Filament\Resources\LabOrderResource\RelationManagers\LabResultsRelationManager;
 use App\Models\LabOrder;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -116,7 +117,7 @@ class LabOrderResource extends Resource
                     ->schema([
 
                         Forms\Components\Textarea::make('notes')
-                            ->label('Additional Notes')
+                            ->label('Additional notes to guide the laboratory tests')
                             ->placeholder('Any clinical notes or special instructions for the lab')
                             ->rows(4)
                             ->columnSpanFull(),
@@ -184,7 +185,7 @@ class LabOrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            LabResultsRelationManager::class,
         ];
     }
 
