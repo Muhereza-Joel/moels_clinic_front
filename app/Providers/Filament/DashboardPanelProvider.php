@@ -50,9 +50,9 @@ class DashboardPanelProvider extends PanelProvider
 
             ])
             ->navigationGroups([
-                'Medical Records',
                 'Sales Management',
                 'Inventory Management',
+                'Medical Records',
                 'Filament Shield',
             ])
             ->middleware([
