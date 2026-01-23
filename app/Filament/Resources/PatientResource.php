@@ -55,6 +55,7 @@ class PatientResource extends Resource
 
                         Forms\Components\DatePicker::make('date_of_birth')
                             ->label('Date of Birth')
+                            ->native(false)
                             ->maxDate(now())
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'Used to calculate patient age' : null),
 
@@ -127,6 +128,7 @@ class PatientResource extends Resource
                     ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sex')
+                    ->label('Gender')
                     ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date_of_birth')
@@ -136,14 +138,19 @@ class PatientResource extends Resource
                 Tables\Columns\TextColumn::make('national_id')
                     ->placeholder("---")
                     ->label('NIN Number')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->placeholder("---")
-                    ->label('Email Address')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Phone Number')
                     ->placeholder("---")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('emergency_contact')
+                    ->placeholder("---")
+                    ->label('Emergency Contact')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->label('Email Address')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -184,6 +191,7 @@ class PatientResource extends Resource
             //
         ];
     }
+
 
     public static function getPages(): array
     {
