@@ -21,7 +21,7 @@ class ListPatients extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            QuickPatientSearch::class,
+            // QuickPatientSearch::class,
         ];
     }
 }
