@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Drug;
 use App\Models\Patient;
 use Illuminate\Support\Str;
+use App\Filament\Filters\CreatedAtDateFilter;
 
 class DrugSaleResource extends Resource
 {
@@ -311,6 +312,7 @@ class DrugSaleResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                CreatedAtDateFilter::make(),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
