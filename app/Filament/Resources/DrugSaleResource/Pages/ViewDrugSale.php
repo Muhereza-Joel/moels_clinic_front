@@ -13,7 +13,8 @@ class ViewDrugSale extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            Actions\EditAction::make()
+                ->disabled(fn($record) => $record->payment_status === 'paid')
         ];
     }
 }

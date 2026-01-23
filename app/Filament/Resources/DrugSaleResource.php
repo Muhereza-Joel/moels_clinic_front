@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Drug;
 use App\Models\Patient;
+use Illuminate\Support\Str;
 
 class DrugSaleResource extends Resource
 {
@@ -225,42 +226,76 @@ class DrugSaleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('uuid')
-                    ->label('UUID'),
-                Tables\Columns\TextColumn::make('organization_id')
+                Tables\Columns\TextColumn::make('sale_date')
+                    ->placeholder("---")
+                    ->dateTime()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('drug.name')
+                    ->placeholder("---")
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('drug_id')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('patient.fullname')
+                    ->placeholder("---")
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('patient_id')
-                    ->numeric()
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('customer_name')
+                    ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('customer_contact')
+                    ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('quantity')
+                    ->placeholder('—')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->suffix(
+                        fn($record) =>
+                        Str::of($record->drug?->unit_of_measure)
+                            ->trim()
+                            ->whenNotEmpty(function ($unit) use ($record) {
+                                return ' ' . Str::plural($unit, (int) $record->quantity);
+                            })
+                    ),
                 Tables\Columns\TextColumn::make('unit_price')
+                    ->placeholder("---")
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_price')
+                    ->placeholder("---")
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sale_date')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
+                    ->placeholder("---")
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('payment_method')
-                    ->searchable(),
+                    ->label('Payment Method')
+                    ->badge()
+                    ->colors([
+                        'success' => 'cash',          // green
+                        'warning' => 'mobile_money',  // yellow/orange
+                        'info' => 'card',              // blue
+                        'primary' => 'bank_transfer',  // indigo
+                    ])
+                    ->searchable()
+                    ->placeholder('—'),
+
                 Tables\Columns\TextColumn::make('payment_status')
-                    ->searchable(),
+                    ->label('Payment Status')
+                    ->badge()
+                    ->colors([
+                        'success' => 'paid',    // green
+                        'warning' => 'pending', // yellow
+                    ])
+                    ->searchable()
+                    ->placeholder('—'),
+
                 Tables\Columns\TextColumn::make('receipt_number')
+                    ->placeholder("---")
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
@@ -280,7 +315,8 @@ class DrugSaleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->disabled(fn($record) => $record->payment_status === 'paid'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

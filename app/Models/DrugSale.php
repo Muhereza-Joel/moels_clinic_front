@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
 use App\Traits\HasUuid;
+use App\Traits\PreventEditingPaidDrugSale;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DrugSale extends BaseModel
 {
-    use HasFactory, SoftDeletes, HasUuid, BelongsToOrganization, Auditable;
+    use HasFactory, SoftDeletes, HasUuid, BelongsToOrganization, Auditable, PreventEditingPaidDrugSale;
 
     protected $table = 'drug_sales';
 
@@ -78,7 +79,7 @@ class DrugSale extends BaseModel
         return $this->belongsTo(Patient::class);
     }
 
-    public function staff()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

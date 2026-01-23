@@ -14,9 +14,16 @@ class EditDrugSale extends EditRecord
     {
         return [
             Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
-            Actions\ForceDeleteAction::make(),
+            Actions\DeleteAction::make()->disabled(fn($record) => $record->payment_status === 'paid'),
+            Actions\ForceDeleteAction::make()->disabled(fn($record) => $record->payment_status === 'paid'),
             Actions\RestoreAction::make(),
         ];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $this->record->preventEditingPaid();
+
+        return $data;
     }
 }
