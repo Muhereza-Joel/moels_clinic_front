@@ -43,7 +43,7 @@ class PatientFactory extends Factory
             'mrn' => self::generateMrn(), // call factory’s own MRN generator
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
-            'sex' => $this->faker->randomElement(['Male', 'Female']),
+            'sex' => $this->faker->randomElement(['male', 'female']),
             'date_of_birth' => $this->faker->date(),
             'national_id' => strtoupper($this->faker->bothify('??########')),
             'email' => $this->faker->unique()->safeEmail,
