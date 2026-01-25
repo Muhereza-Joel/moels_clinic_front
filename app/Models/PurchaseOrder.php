@@ -106,6 +106,12 @@ class PurchaseOrder extends BaseModel
         'formatted_amount_due',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
+
     protected static function booted()
     {
         static::creating(function ($order) {

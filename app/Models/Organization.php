@@ -66,6 +66,46 @@ class Organization extends BaseModel
         return $this->hasMany(Invoice::class);
     }
 
+    public function invoiceItems()
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
+
+    public function labOrders()
+    {
+        return $this->hasMany(LabOrder::class);
+    }
+
+    public function labResults()
+    {
+        return $this->hasMany(LabResult::class);
+    }
+
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class);
+    }
+
+    public function prescriptionItems()
+    {
+        return $this->hasMany(PrescriptionItem::class);
+    }
+
     public function drugs()
     {
         return $this->hasMany(Drug::class);
@@ -89,5 +129,45 @@ class Organization extends BaseModel
     public function drugCategories()
     {
         return $this->hasMany(DrugCategory::class);
+    }
+
+    public function purchaseOrders()
+    {
+        return $this->hasMany(PurchaseOrder::class);
+    }
+
+    public function purchaseOrderItems()
+    {
+        return $this->hasMany(PurchaseOrderItem::class);
+    }
+
+    public function purchasePayments()
+    {
+        return $this->hasMany(PurchasePayment::class);
+    }
+
+    public function auditLogs()
+    {
+        return $this->hasMany(AuditLog::class);
+    }
+
+    public function recordTypes()
+    {
+        return $this->hasMany(RecordType::class);
+    }
+
+    public function medicalRecords()
+    {
+        return $this->hasMany(MedicalRecord::class);
+    }
+
+    public function icd10Codes()
+    {
+        return $this->hasMany(Icd10Code::class);
+    }
+
+    public function cptCodes()
+    {
+        return $this->hasMany(CptCode::class);
     }
 }

@@ -39,6 +39,12 @@ class PurchaseOrderItem extends BaseModel
         'expiry_date' => 'date',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
+
     public function purchaseOrder()
     {
         return $this->belongsTo(PurchaseOrder::class);

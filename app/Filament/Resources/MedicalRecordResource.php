@@ -146,7 +146,7 @@ class MedicalRecordResource extends Resource
                                 titleAttribute: 'code'      // column on Icd10Code model
                             )
                             ->getOptionLabelFromRecordUsing(
-                                fn($record) => $record->code . ' — ' . $record->description
+                                fn($record) => $record->code . ' — ' . strip_tags($record->description)
                             )
                             ->searchable()
                             ->preload()
@@ -161,7 +161,7 @@ class MedicalRecordResource extends Resource
                                 titleAttribute: 'code'      // column on CptCode model
                             )
                             ->getOptionLabelFromRecordUsing(
-                                fn($record) => $record->code . ' — ' . $record->description
+                                fn($record) => $record->code . ' — ' . strip_tags($record->description)
                             )
                             ->searchable()
                             ->preload()

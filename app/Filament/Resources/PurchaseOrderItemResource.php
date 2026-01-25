@@ -20,6 +20,7 @@ class PurchaseOrderItemResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
     protected static ?string $navigationGroup = 'Inventory Management';
+    protected static ?string $navigationLabel = 'Purchase Stock Taking';
     protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
