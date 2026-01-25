@@ -75,4 +75,19 @@ class Organization extends BaseModel
     {
         return $this->hasMany(Setting::class);
     }
+
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class);
+    }
+
+    public function drugSales()
+    {
+        return $this->hasMany(DrugSale::class);
+    }
+
+    public function drugCategories()
+    {
+        return $this->hasMany(DrugCategory::class);
+    }
 }

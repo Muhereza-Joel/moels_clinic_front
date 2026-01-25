@@ -46,10 +46,7 @@ class DashboardPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                Widgets\AccountWidget::class,
-
-            ])
+            ->widgets([])
             ->navigationGroups([
                 'Sales Management',
                 'Inventory Management',

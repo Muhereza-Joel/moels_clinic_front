@@ -166,6 +166,7 @@ class SupplierResource extends Resource
                             Forms\Components\Select::make('rating')
                                 ->label('Supplier Rating')
                                 ->options(SupplierRating::labels())
+                                ->default(SupplierRating::AVERAGE->value)
                                 ->required()
                                 ->native(false)
                                 ->placeholder('Select a rating')
