@@ -33,6 +33,7 @@ class DashboardPanelProvider extends PanelProvider
             ->databaseTransactions()
             ->simplePageMaxContentWidth(MaxWidth::Small)
             ->login()
+            ->sidebarCollapsibleOnDesktop()
             ->brandLogo(fn() => view('filament.dashboard.logo'))
             ->brandLogoHeight('auto')
             ->colors([
