@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);

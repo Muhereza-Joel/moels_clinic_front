@@ -19,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\SetTenant;
+use App\Models\Organization;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -27,7 +28,7 @@ class DashboardPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('dashboard')
-            ->path('dashboard')
+            ->path('clinika')
             ->sidebarWidth('16rem')
             ->databaseTransactions()
             ->simplePageMaxContentWidth(MaxWidth::Small)
@@ -68,7 +69,14 @@ class DashboardPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])->plugins(
+            ])->tenant(
+                model: Organization::class,
+            )
+            ->tenantMenu(true)
+            ->tenantMiddleware([
+                \BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant::class,
+            ], isPersistent: true)
+            ->plugins(
                 [
                     \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 ]

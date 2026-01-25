@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Role;
+
 return [
 
     'models' => [
@@ -24,7 +26,7 @@ return [
          * `Spatie\Permission\Contracts\Role` contract.
          */
 
-        'role' => Spatie\Permission\Models\Role::class,
+        'role' => Role::class,
 
     ],
 
@@ -93,7 +95,7 @@ return [
          * foreign key is other than `team_id`.
          */
 
-        'team_foreign_key' => 'team_id',
+        'team_foreign_key' => 'organization_id',
     ],
 
     /*

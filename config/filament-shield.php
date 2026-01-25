@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Organization;
+
 return [
     'shield_resource' => [
         'should_register_navigation' => true,
@@ -14,7 +16,7 @@ return [
         'cluster' => null,
     ],
 
-    'tenant_model' => null,
+    'tenant_model' => Organization::class,
 
     'auth_provider_model' => [
         'fqcn' => 'App\\Models\\User',
@@ -73,7 +75,8 @@ return [
         ],
 
         'widgets' => [
-            'AccountWidget', 'FilamentInfoWidget',
+            'AccountWidget',
+            'FilamentInfoWidget',
         ],
 
         'resources' => [],

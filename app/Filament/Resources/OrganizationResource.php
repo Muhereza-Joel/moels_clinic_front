@@ -18,7 +18,9 @@ class OrganizationResource extends Resource
     protected static ?string $model = Organization::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static bool $shouldRegisterNavigation = false;
     protected static ?int $navigationSort = 9;
+
 
     public static function form(Form $form): Form
     {

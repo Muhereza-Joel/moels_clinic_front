@@ -8,6 +8,7 @@ use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Facades\Filament;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,14 +30,7 @@ class UserResource extends Resource
                 Forms\Components\Section::make('User Information')
                     ->description(fn() => $form->getOperation() !== 'view' ? 'Basic personal details for the user.' : null)
                     ->schema([
-                        Forms\Components\Select::make('organization_id')
-                            ->label('Branch / Organisation')
-                            ->relationship('organization', 'name')
-                            ->required()
-                            ->preload()
-                            ->native(false)
-                            ->placeholder('Select an organisation')
-                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'This user will belong to the selected organisation.' : null),
+
                         Forms\Components\TextInput::make('name')
                             ->label('Full Name')
                             ->placeholder('Enter the full name of the user')
@@ -62,13 +56,16 @@ class UserResource extends Resource
                             ->relationship(
                                 name: 'roles',
                                 titleAttribute: 'name',
-                                modifyQueryUsing: fn($query) => $query->where('name', '!=', 'super_admin')
+                                modifyQueryUsing: fn($query) => $query
+                                    ->where('roles.organization_id', Filament::getTenant()?->id)
+                                    ->where('roles.name', '!=', 'super_admin')
                             )
                             ->preload()
-                            ->placeholder("Select prevelage for the user")
+                            ->placeholder('Select privilege for the user')
                             ->searchable()
-                            ->multiple(false) // Explicit: one role per user
+                            ->multiple(false)
                             ->required(),
+
 
                         Forms\Components\TextInput::make('password')
                             ->password()
@@ -173,6 +170,6 @@ class UserResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])->withoutSuperAdmin();
     }
 }

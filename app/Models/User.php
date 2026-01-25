@@ -6,13 +6,15 @@ namespace App\Models;
 
 use App\Traits\Auditable;
 use App\Traits\HasUuid;
+use Filament\Models\Contracts\HasTenants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasTenants
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, SoftDeletes, HasUuid, Auditable;
@@ -65,6 +67,23 @@ class User extends Authenticatable
         return $this->belongsTo(Organization::class);
     }
 
+    public function getTenants(\Filament\Panel $panel): array|\Illuminate\Database\Eloquent\Collection
+    {
+        // if ($this->hasRole('super_admin')) {
+        //     return \App\Models\Organization::all(); // global super admin sees all orgs
+        // }
+
+        return $this->organization
+            ? new \Illuminate\Database\Eloquent\Collection([$this->organization])
+            : new \Illuminate\Database\Eloquent\Collection();
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return true;
+    }
+
+
     public function doctor()
     {
         return $this->hasOne(Doctor::class);
@@ -109,5 +128,14 @@ class User extends Authenticatable
     public function scopeNurses($query)
     {
         return $query->hasRole('nurse');
+    }
+
+    public function scopeWithoutSuperAdmin($query)
+    {
+        return $query->whereDoesntHave(
+            'roles',
+            fn($q) =>
+            $q->where('roles.name', 'super_admin')
+        );
     }
 }

@@ -15,6 +15,7 @@ class Organization extends BaseModel
     protected $fillable = [
         'uuid',
         'name',
+        'slug',
         'code',
         'description',
         'is_active'
@@ -26,10 +27,15 @@ class Organization extends BaseModel
 
     public function getRouteKeyName(): string
     {
-        return 'uuid';
+        return 'slug';
     }
 
     // Relationships
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);
