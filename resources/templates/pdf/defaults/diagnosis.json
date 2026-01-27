@@ -1,0 +1,48 @@
+{
+    "sections": [
+        {
+            "title": {
+                "en": "Patient Information",
+                "fr": "Informations du Patient"
+            },
+            "grid": {
+                "columns": 2,
+                "items": [
+                    { "type": "text", "content": "Name: {{patient.name}}" },
+                    { "type": "text", "content": "DOB: {{patient.dob}}" },
+                    { "type": "text", "content": "Visit Date: {{visit.date}}" },
+                    {
+                        "type": "text",
+                        "content": "Doctor: {{authored_by.name}}"
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Diagnosis",
+            "grid": {
+                "columns": 1,
+                "items": [
+                    {
+                        "type": "conditional",
+                        "condition": "{{icd10.code}}",
+                        "block": {
+                            "type": "text",
+                            "content": "ICD10: {{icd10.code}} - {{icd10.description}}"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Notes",
+            "grid": {
+                "columns": 1,
+                "items": [{ "type": "text", "content": "{{content}}" }]
+            }
+        }
+    ],
+    "footer": {
+        "text": "Generated on {{now}}"
+    }
+}

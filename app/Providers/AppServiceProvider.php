@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->singleton(\App\Services\Pdf\TemplateRenderer::class, function ($app) {
+            return new \App\Services\Pdf\TemplateRenderer();
+        });
     }
+
 
     public function boot(): void
     {

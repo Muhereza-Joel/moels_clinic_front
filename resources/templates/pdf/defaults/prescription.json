@@ -1,0 +1,87 @@
+{
+    "theme": {
+        "primary_color": [0, 102, 204],
+        "secondary_color": [255, 255, 255],
+        "font": "helvetica"
+    },
+    "sections": [
+        {
+            "title": {
+                "en": "Clinic Information",
+                "fr": "Informations de la Clinique"
+            },
+            "grid": {
+                "columns": 2,
+                "items": [
+                    {
+                        "type": "text",
+                        "content": "Clinic: {{organization.name}}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Address: {{organization.address}}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Phone: {{organization.phone}}"
+                    },
+                    {
+                        "type": "text",
+                        "content": "Doctor: {{authored_by.name}}"
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Patient Information",
+            "grid": {
+                "columns": 2,
+                "items": [
+                    { "type": "text", "content": "Name: {{patient.name}}" },
+                    { "type": "text", "content": "DOB: {{patient.dob}}" },
+                    { "type": "text", "content": "Visit Date: {{visit.date}}" },
+                    {
+                        "type": "text",
+                        "content": "Patient ID: {{patient.uuid}}"
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Prescription Details",
+            "grid": {
+                "columns": 1,
+                "items": [
+                    {
+                        "type": "colored_box",
+                        "color": [230, 255, 230],
+                        "content": "Medication: {{data_json.medication}} \nDosage: {{data_json.dosage}} \nFrequency: {{data_json.frequency}}"
+                    },
+                    {
+                        "type": "colored_box",
+                        "color": [255, 245, 230],
+                        "content": "Instructions: {{data_json.instructions}}"
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Verification",
+            "grid": {
+                "columns": 2,
+                "items": [
+                    {
+                        "type": "qrcode",
+                        "value": "{{uuid}}"
+                    },
+                    {
+                        "type": "signature"
+                    }
+                ]
+            }
+        }
+    ],
+    "footer": {
+        "text": "Generated on {{now}}"
+    }
+}

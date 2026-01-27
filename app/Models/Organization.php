@@ -170,4 +170,9 @@ class Organization extends BaseModel
     {
         return $this->hasMany(CptCode::class);
     }
+
+    public function pdfTemplates()
+    {
+        return $this->hasMany(PdfTemplate::class);
+    }
 }
