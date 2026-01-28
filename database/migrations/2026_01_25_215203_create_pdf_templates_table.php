@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('code'); // e.g. 'diagnosis'
             $table->string('name');
             $table->jsonb('layout')->default('{}'); // JSON schema
-            $table->integer('version')->default(1);
+            $table->string('version')->default('1.0.0');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();

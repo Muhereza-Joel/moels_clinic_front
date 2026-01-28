@@ -2,34 +2,24 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-use Spatie\Permission\PermissionRegistrar;
-use Filament\Facades\Filament;
-use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register()
+    /**
+     * Register any application services.
+     */
+    public function register(): void
     {
-        $this->app->singleton(\App\Services\Pdf\TemplateRenderer::class, function ($app) {
-            return new \App\Services\Pdf\TemplateRenderer();
-        });
+        //
     }
 
-
+    /**
+     * Bootstrap any application services.
+     */
     public function boot(): void
     {
-        $this->app->booted(function () {
-            $user = Auth::user();
-
-            if ($user) {
-                if ($user->hasRole('super_admin')) {
-                    app(PermissionRegistrar::class)->setPermissionsTeamId(null);
-                } else {
-                    $tenantId = Filament::getTenant()?->id ?? $user->organization_id;
-                    app(PermissionRegistrar::class)->setPermissionsTeamId($tenantId);
-                }
-            }
-        });
+        Vite::prefetch(concurrency: 3);
     }
 }
