@@ -29,6 +29,7 @@ class User extends Authenticatable implements HasTenants
         'organization_id',
         'name',
         'email',
+        'phone',
         'password',
     ];
 
