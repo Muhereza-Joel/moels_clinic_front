@@ -62,11 +62,11 @@ class VisitResource extends Resource
                             ->getSearchResultsUsing(
                                 fn(string $search): array =>
                                 \App\Models\Patient::query()
-                                    ->where('mrn', 'like', "%{$search}%")
-                                    ->orWhere('first_name', 'like', "%{$search}%")
-                                    ->orWhere('last_name', 'like', "%{$search}%")
-                                    ->orWhere('phone', 'like', "%{$search}%")
-                                    ->orWhere('emergency_contact', 'like', "%{$search}%")
+                                    ->where('mrn', 'ilike', "%{$search}%")
+                                    ->orWhere('first_name', 'ilike', "%{$search}%")
+                                    ->orWhere('last_name', 'ilike', "%{$search}%")
+                                    ->orWhere('phone', 'ilike', "%{$search}%")
+                                    ->orWhere('emergency_contact', 'ilike', "%{$search}%")
                                     ->limit(50)
                                     ->get()
                                     ->mapWithKeys(fn($patient) => [
@@ -74,6 +74,7 @@ class VisitResource extends Resource
                                     ])
                                     ->toArray()
                             )
+
                             ->getOptionLabelUsing(
                                 fn($value): ?string =>
                                 \App\Models\Patient::find($value)?->full_name
