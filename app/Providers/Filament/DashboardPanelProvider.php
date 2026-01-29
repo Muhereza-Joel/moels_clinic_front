@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,7 +28,7 @@ class DashboardPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('dashboard')
+            ->id('clinika')
             ->path('clinika')
             ->sidebarWidth('16rem')
             ->databaseTransactions()
@@ -65,10 +66,12 @@ class DashboardPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
                 SetTenant::class,
             ])
+            ->authGuard('web')
             ->authMiddleware([
                 Authenticate::class,
             ])->tenant(
                 model: Organization::class,
+                slugAttribute: 'slug',
             )
             ->tenantMenu(true)
             ->tenantMiddleware([
@@ -77,6 +80,16 @@ class DashboardPanelProvider extends PanelProvider
             ->plugins(
                 [
                     \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                    BreezyCore::make()
+                        ->myProfile(
+                            shouldRegisterUserMenu: true, // Sets the 'account' link in the panel User Menu (default = true)
+                            userMenuLabel: 'My Profile', // Customizes the 'account' link label in the panel User Menu (default = null)
+                            shouldRegisterNavigation: false, // Adds a main navigation item for the My Profile page (default = false)
+                            navigationGroup: 'Settings', // Sets the navigation group for the My Profile page (default = null)
+                            hasAvatars: false, // Enables the avatar upload form component (default = false)
+
+                        )
+
                 ]
             );
     }
