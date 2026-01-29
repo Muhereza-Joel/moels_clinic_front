@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Auditable;
 use App\Traits\BelongsToOrganization;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -67,6 +68,24 @@ class Doctor extends BaseModel
     {
         return $query->whereHas('user', function ($q) {
             $q->where('is_active', true);
+        });
+    }
+
+    protected function speciality(): Attribute
+    {
+        return Attribute::get(function ($value, $attributes) {
+            $map = [
+                'doctor' => 'Doctor',
+                'nurse' => 'Nurse',
+                'midwife' => 'Midwife',
+                'clinical_officer' => 'Clinical Officer',
+                'lab_technician' => 'Lab Technician',
+                'pharmacist' => 'Pharmacist',
+                'radiographer' => 'Radiographer',
+                'receptionist' => 'Receptionist',
+                'admin' => 'Administrator',
+            ];
+            return $map[$attributes['specialty']] ?? ucfirst($attributes['specialty']);
         });
     }
 }

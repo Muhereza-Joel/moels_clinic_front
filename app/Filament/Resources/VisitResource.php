@@ -88,7 +88,7 @@ class VisitResource extends Resource
 
                         // Doctor selection (auto-filled)
                         Forms\Components\Select::make('doctor_id')
-                            ->label('Doctor')
+                            ->label('Staff Member / Doctor')
                             ->relationship('doctor', 'id')
                             ->getOptionLabelFromRecordUsing(fn(Doctor $record) => $record->user->name)
                             ->searchable()
