@@ -43,6 +43,7 @@ class PrescriptionResource extends Resource
                                     $record->patient->last_name .
                                     ' — ' . $record->created_at->format('d M Y H:i')
                             )
+                            ->default(fn() => request()->get('visit_id'))
                             ->searchable()
                             ->preload()
                             ->required()

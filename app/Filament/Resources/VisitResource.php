@@ -182,8 +182,22 @@ class VisitResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make('createPrescription')
+                        ->label('Create Prescription')
+                        ->icon('heroicon-o-beaker')
+                        ->url(
+                            fn(Visit $record) =>
+                            PrescriptionResource::getUrl('create', [
+                                'visit_id' => $record->id,
+                            ])
+                        ),
+
+                ])->label('Select Action')
+                    ->button(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
