@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PdfPreviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TemplateController;
@@ -130,6 +131,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
+
+    Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
+    Route::get('/invoices/{invoice}/preview', [InvoiceController::class, 'preview'])->name('invoices.preview');
+    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download'])->name('invoices.download');
 });
 
 require __DIR__ . '/auth.php';
