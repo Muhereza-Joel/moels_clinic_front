@@ -58,14 +58,32 @@ class VisitResource extends Resource
                         // Patient selection (auto-filled)
                         Forms\Components\Select::make('patient_id')
                             ->label('Patient')
-                            ->relationship('patient', 'id')
-                            ->getOptionLabelFromRecordUsing(fn(Patient $record) => $record->full_name)
                             ->searchable()
+                            ->getSearchResultsUsing(
+                                fn(string $search): array =>
+                                \App\Models\Patient::query()
+                                    ->where('mrn', 'like', "%{$search}%")
+                                    ->orWhere('first_name', 'like', "%{$search}%")
+                                    ->orWhere('last_name', 'like', "%{$search}%")
+                                    ->orWhere('phone', 'like', "%{$search}%")
+                                    ->orWhere('emergency_contact', 'like', "%{$search}%")
+                                    ->limit(50)
+                                    ->get()
+                                    ->mapWithKeys(fn($patient) => [
+                                        $patient->id => "{$patient->mrn} - {$patient->full_name} ({$patient->phone})"
+                                    ])
+                                    ->toArray()
+                            )
+                            ->getOptionLabelUsing(
+                                fn($value): ?string =>
+                                \App\Models\Patient::find($value)?->full_name
+                            )
                             ->preload()
                             ->required()
                             ->native(false)
                             ->placeholder('Select patient if not using appointment')
-                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Automatically filled when appointment is selected.' : null),
+                            ->helperText('Automatically filled when appointment is selected.'),
+
 
                         // Doctor selection (auto-filled)
                         Forms\Components\Select::make('doctor_id')
