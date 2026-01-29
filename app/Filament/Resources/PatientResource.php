@@ -173,9 +173,43 @@ class PatientResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make('createVisit')
+                        ->label('Create Visit')
+                        ->icon('heroicon-o-clipboard-document')
+                        ->url(
+                            fn(Patient $record) =>
+                            VisitResource::getUrl('create', [
+                                'patient_id' => $record->id,
+                            ])
+                        ),
+                    Tables\Actions\Action::make('createAppointment')
+                        ->label('Book Appointment')
+                        ->icon('heroicon-o-calendar-days')
+                        ->url(
+                            fn(Patient $record) =>
+                            AppointmentResource::getUrl('create', [
+                                'patient_id' => $record->id,
+                            ])
+                        ),
+
+                    Tables\Actions\Action::make('createInvoice')
+                        ->label('Create Invoice')
+                        ->icon('heroicon-o-receipt-percent')
+                        ->url(
+                            fn(Patient $record) =>
+                            InvoiceResource::getUrl('create', [
+                                'patient_id' => $record->id,
+                            ])
+                        ),
+                ])
+                    ->label('Select Action')
+                    ->button(),
             ])
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

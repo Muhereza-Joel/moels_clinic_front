@@ -45,6 +45,7 @@ class InvoiceResource extends Resource
                                 $record->first_name . ' ' . $record->last_name .
                                     ($record->phone ? ' — ' . $record->phone : '')
                             )
+                            ->default(fn() => request()->get('patient_id'))
                             ->searchable()
                             ->preload()
                             ->required()

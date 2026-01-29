@@ -79,6 +79,7 @@ class VisitResource extends Resource
                                 fn($value): ?string =>
                                 \App\Models\Patient::find($value)?->full_name
                             )
+                            ->default(fn() => request()->get('patient_id'))
                             ->preload()
                             ->required()
                             ->native(false)

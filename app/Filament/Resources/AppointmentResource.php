@@ -38,6 +38,7 @@ class AppointmentResource extends Resource
                                 name: 'patient',
                                 modifyQueryUsing: fn($query) => $query->orderBy('last_name')
                             )
+                            ->default(fn() => request()->get('patient_id'))
                             ->getOptionLabelFromRecordUsing(fn(Patient $record) => "{$record->full_name} ({$record->phone})")
                             ->searchable(['first_name', 'last_name', 'phone']) // allow searching by phone too
                             ->preload()
