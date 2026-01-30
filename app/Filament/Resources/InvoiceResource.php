@@ -158,7 +158,17 @@ class InvoiceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->header(view('filament.tables.invoice-status-legend'))
             ->defaultSort('created_at', 'desc')
+            ->recordClasses(fn($record) => match ($record->status) {
+                'draft' => 'invoice-row-draft invoice-row-hover',
+                'issued' => 'invoice-row-issued invoice-row-hover',
+                'partially_paid' => 'invoice-row-partially-paid invoice-row-hover',
+                'paid' => 'invoice-row-paid invoice-row-hover',
+                'void' => 'invoice-row-void invoice-row-hover',
+                default => null,
+            })
+
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number')
                     ->searchable(),

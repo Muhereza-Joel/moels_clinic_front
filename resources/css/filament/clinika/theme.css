@@ -1,0 +1,67 @@
+@import "../../../../vendor/filament/filament/resources/css/theme.css";
+
+@config 'tailwind.config.js';
+
+/* -------------------------------------------------
+ | Invoice row status colors (rows)
+ -------------------------------------------------*/
+
+.invoice-row-draft {
+    @apply bg-gray-50 dark:bg-gray-900 dark:border-l-4 dark:border-gray-500;
+}
+
+.invoice-row-issued {
+    @apply bg-yellow-50 dark:bg-yellow-900/40 dark:border-l-4 dark:border-yellow-500;
+}
+
+.invoice-row-partially-paid {
+    @apply bg-blue-50 dark:bg-blue-900/40 dark:border-l-4 dark:border-blue-500;
+}
+
+.invoice-row-paid {
+    @apply bg-green-50 dark:bg-green-900/40 dark:border-l-4 dark:border-green-500;
+}
+
+.invoice-row-void {
+    @apply bg-red-50 dark:bg-red-900/40 dark:border-l-4 dark:border-red-500;
+}
+
+.invoice-row-hover {
+    @apply transition-colors duration-150
+           hover:bg-opacity-80
+           dark:hover:bg-opacity-90;
+}
+
+/* -------------------------------------------------
+ | Invoice status legend dots
+ | Reuses same color intent as rows
+ -------------------------------------------------*/
+
+.invoice-legend-dot {
+    @apply h-3 w-3 rounded-full border;
+}
+
+/* Draft */
+.invoice-legend-draft {
+    @apply bg-gray-400 border-gray-500;
+}
+
+/* Issued */
+.invoice-legend-issued {
+    @apply bg-yellow-500 border-yellow-600;
+}
+
+/* Partially Paid */
+.invoice-legend-partially-paid {
+    @apply bg-blue-500 border-blue-600;
+}
+
+/* Paid */
+.invoice-legend-paid {
+    @apply bg-green-500 border-green-600;
+}
+
+/* Void */
+.invoice-legend-void {
+    @apply bg-red-500 border-red-600;
+}
