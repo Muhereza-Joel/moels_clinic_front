@@ -20,7 +20,6 @@ class PdfTemplateResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'PDF Templates';
-    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Forms\Form $form): Forms\Form
     {
