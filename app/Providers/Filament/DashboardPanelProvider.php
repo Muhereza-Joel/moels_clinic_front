@@ -59,7 +59,7 @@ class DashboardPanelProvider extends PanelProvider
                 'Sales Management',
                 'Inventory Management',
                 'Medical Records',
-                'Filament Shield',
+                'Role and Permissions',
             ])
             ->middleware([
                 EncryptCookies::class,
