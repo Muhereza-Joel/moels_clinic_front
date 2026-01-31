@@ -81,6 +81,11 @@ class Organization extends BaseModel
         return $this->hasMany(Refund::class);
     }
 
+    public function wards()
+    {
+        return $this->hasMany(Ward::class);
+    }
+
     public function rooms()
     {
         return $this->hasMany(Room::class);
