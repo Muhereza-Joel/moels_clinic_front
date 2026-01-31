@@ -32,6 +32,7 @@ class DashboardPanelProvider extends PanelProvider
             ->default()
             ->id('clinika')
             ->path('clinika')
+            ->spa()
             ->sidebarWidth('16rem')
             ->databaseTransactions()
             ->simplePageMaxContentWidth(MaxWidth::Small)
