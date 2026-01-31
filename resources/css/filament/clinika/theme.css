@@ -386,6 +386,51 @@
 }
 
 /* -------------------------------------------------
+ | Admission row status colors (rows)
+ -------------------------------------------------*/
+
+.admission-row-active {
+    @apply bg-blue-50 dark:bg-blue-900/40 dark:border-l-4 dark:border-blue-500;
+}
+
+.admission-row-discharged {
+    @apply bg-green-50 dark:bg-green-900/40 dark:border-l-4 dark:border-green-500;
+}
+
+.admission-row-transferred {
+    @apply bg-purple-50 dark:bg-purple-900/40 dark:border-l-4 dark:border-purple-500;
+}
+
+.admission-row-hover {
+    @apply transition-colors duration-150
+           hover:bg-opacity-80
+           dark:hover:bg-opacity-90;
+}
+
+/* -------------------------------------------------
+ | Admission status legend dots
+ -------------------------------------------------*/
+
+.admission-legend-dot {
+    @apply h-3 w-3 rounded-full border;
+}
+
+/* Active */
+.admission-legend-active {
+    @apply bg-blue-500 border-blue-600;
+}
+
+/* Discharged */
+.admission-legend-discharged {
+    @apply bg-green-500 border-green-600;
+}
+
+/* Transferred */
+.admission-legend-transferred {
+    @apply bg-purple-500 border-purple-600;
+}
+
+/* -------------------------------------------------
  | StatsOverview card styles
  -------------------------------------------------*/
 

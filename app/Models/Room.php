@@ -41,6 +41,12 @@ class Room extends BaseModel
         return $this->hasMany(Appointment::class);
     }
 
+    public function ward()
+    {
+        return $this->belongsTo(Ward::class);
+    }
+
+
     // Scopes
     public function scopeAvailable($query, $start, $end)
     {

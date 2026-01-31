@@ -18,7 +18,7 @@ class RoomResource extends Resource
     protected static ?string $model = Room::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-home';
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
@@ -35,12 +35,25 @@ class RoomResource extends Resource
                             ->maxLength(255)
                             ->helperText(fn() => $form->getOperation() !== 'view' ? 'The display name of the room, e.g., “Consultation Room 1”' : null),
 
+                        Forms\Components\Select::make('ward_id')
+                            ->label('Parent Ward If Applicable')
+                            ->relationship(
+                                name: 'ward',
+                                modifyQueryUsing: fn($query) => $query->orderBy('name')
+                            )
+                            ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} ({$record->type})")
+                            ->searchable(['name', 'type'])
+                            ->preload()
+                            ->nullable()
+                            ->placeholder('Optional: Select the ward this room belongs to')
+                            ->helperText(fn() => $form->getOperation() !== 'view' ? 'Select the ward this room belongs to, if applicable.' : null),
+
                         Forms\Components\Select::make('type')
                             ->label('Room Type')
                             ->options([
                                 'consultation' => 'Consultation',
                                 'procedure' => 'Procedure',
-                                'ward' => 'Ward',
+                                // 'ward' => 'Ward',
                                 'lab' => 'Lab',
                                 'pharmacy' => 'Pharmacy',
                             ])
@@ -65,10 +78,15 @@ class RoomResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('ward.name')
+                    ->label("Parent Ward")
+                    ->placeholder("---")
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type')
+                    ->label("Room Type")
                     ->placeholder("---")
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')

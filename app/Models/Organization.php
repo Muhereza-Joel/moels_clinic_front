@@ -91,6 +91,11 @@ class Organization extends BaseModel
         return $this->hasMany(Room::class);
     }
 
+    public function admissions()
+    {
+        return $this->hasMany(Admission::class);
+    }
+
     public function labOrders()
     {
         return $this->hasMany(LabOrder::class);

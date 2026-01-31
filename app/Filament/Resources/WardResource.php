@@ -17,7 +17,8 @@ class WardResource extends Resource
 {
     protected static ?string $model = Ward::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?int $navigationSort = 6;
 
     public static function form(Form $form): Form
     {
