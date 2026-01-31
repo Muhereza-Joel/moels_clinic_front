@@ -19,9 +19,26 @@ class PatientResource extends Resource
     protected static ?string $model = Patient::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-
     protected static ?string $navigationLabel = 'Patients Register';
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $recordTitleAttribute = 'full_name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['first_name', 'last_name', 'phone', 'emergency_contact', 'mrn'];
+    }
+
+    /**
+     * @param \App\Models\Patient $record
+     */
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            "{$record->mrn} · {$record->first_name} {$record->last_name} · {$record->phone}",
+        ];
+    }
+
 
 
     public static function form(Form $form): Form

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Notifications\Actions\Action as NotificationAction;
 use App\Filament\Resources\VisitResource\Pages;
 use App\Filament\Resources\VisitResource\RelationManagers;
 use App\Models\Appointment;
@@ -16,6 +17,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Filters\CreatedAtDateFilter;
+use App\Filament\Actions\ForwardAction;
 
 class VisitResource extends Resource
 {
@@ -24,6 +26,53 @@ class VisitResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document';
     protected static ?string $navigationLabel = 'Patients Visits';
     protected static ?int $navigationSort = 3;
+
+    public static function getGlobalSearchResultTitle($record): string
+    {
+        return "Visit #{$record->id} — {$record->patient->full_name}";
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            collect([
+                $record->visit_date?->format('d M Y H:i'),
+                $record->doctor?->user?->name,
+                ucfirst($record->status),
+            ])->filter()->join(' · ')
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()
+            ->with([
+                'patient:id,first_name,last_name,phone,mrn',
+                'doctor.user:id,name',
+                'appointment:id,sequence',
+            ])
+            ->where('visit_date', '>=', now()->subMonths(3)) // Only last 3 months
+            ->orderByDesc('visit_date');
+    }
+
+
+
+
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'status',
+            'visit_date',
+            'patient.first_name',
+            'patient.last_name',
+            'patient.phone',
+            'patient.mrn',
+            'doctor.user.name',
+            'appointment.sequence',
+        ];
+    }
+
 
     public static function form(Form $form): Form
     {
@@ -142,7 +191,15 @@ class VisitResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->header(view('filament.tables.visit-status-legend'))
             ->defaultSort('created_at', 'desc')
+            ->recordClasses(fn($record) => match ($record->status) {
+                'open' => 'visit-row-open visit-row-hover',
+                'finalized' => 'visit-row-finalized visit-row-hover',
+                'cancelled' => 'visit-row-cancelled visit-row-hover',
+                default => null,
+            })
+
             ->columns([
 
                 Tables\Columns\TextColumn::make('appointment.sequence')
@@ -195,6 +252,7 @@ class VisitResource extends Resource
                                 'visit_id' => $record->id,
                             ])
                         ),
+                    ForwardAction::forward(static::class),
 
                 ])->label('Select Action')
                     ->button(),

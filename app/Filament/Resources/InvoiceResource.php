@@ -186,6 +186,7 @@ class InvoiceResource extends Resource
                         'void' => 'danger',
                         default => 'gray',
                     })
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('subtotal_amount')
                     ->numeric()

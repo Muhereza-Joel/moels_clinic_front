@@ -25,6 +25,63 @@ class LabOrderResource extends Resource
     protected static ?string $navigationLabel = 'Lab Orders / Requests';
     protected static ?int $navigationSort = 4;
 
+    public static function getGlobalSearchResultTitle($record): string
+    {
+        return "Lab Order On Patient — {$record->patient->full_name}";
+    }
+
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'panel_code',
+            'status',
+            'order_date',
+            'patient.first_name',
+            'patient.last_name',
+            'patient.phone',
+            'patient.mrn',
+            'orderedBy.name',
+            'visit.id',
+        ];
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            collect([
+                $record->panel_code,
+                $record->order_date?->format('d M Y H:i'),
+                ucfirst(str_replace('_', ' ', $record->status)),
+            ])->filter()->join(' · ')
+        ];
+    }
+
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()
+            ->with([
+                'patient:id,first_name,last_name,phone,mrn',
+                'orderedBy:id,name',
+                'visit:id',
+            ])
+            ->where(function ($query) {
+                $query
+                    // Always include pending / in-progress lab orders
+                    ->whereIn('status', ['ordered', 'in_progress'])
+                    // Include completed lab orders only from the last 14 days
+                    ->orWhere(function ($q) {
+                        $q->where('status', 'completed')
+                            ->where('order_date', '>=', now()->subDays(14));
+                    });
+            })
+            ->orderByDesc('order_date');
+    }
+
+
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -140,7 +197,16 @@ class LabOrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->header(view('filament.tables.lab-orders-status-legend'))
             ->defaultSort('created_at', 'desc')
+            ->recordClasses(fn($record) => match ($record->status) {
+                'ordered'      => 'laborder-row-ordered laborder-row-hover',
+                'in_progress'  => 'laborder-row-in-progress laborder-row-hover',
+                'completed'    => 'laborder-row-completed laborder-row-hover',
+                'cancelled'    => 'laborder-row-cancelled laborder-row-hover',
+                default        => null,
+            })
+
             ->columns([
                 Tables\Columns\TextColumn::make('patient.full_name')
                     ->numeric()

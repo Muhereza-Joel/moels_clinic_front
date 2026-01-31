@@ -93,6 +93,15 @@ class PrescriptionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->header(view('filament.tables.prescription-status-legend'))
+            ->recordClasses(fn($record) => match ($record->status) {
+                'draft'      => 'prescription-row-draft prescription-row-hover',
+                'issued'     => 'prescription-row-issued prescription-row-hover',
+                'dispensed'  => 'prescription-row-dispensed prescription-row-hover',
+                'cancelled'  => 'prescription-row-cancelled prescription-row-hover',
+                default      => null,
+            })
+            ->defaultSort('created_at', 'desc')
             ->columns([
 
                 Tables\Columns\TextColumn::make('visit')

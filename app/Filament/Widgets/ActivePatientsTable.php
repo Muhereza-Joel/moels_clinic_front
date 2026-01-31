@@ -27,14 +27,12 @@ class ActivePatientsTable extends BaseWidget
             ->columns([
                 Tables\Columns\TextColumn::make('mrn')
                     ->label('MRN')
-                    ->searchable()
                     ->placeholder('---')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('full_name')
                     ->label('Name')
                     ->placeholder('---')
-                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('sex')

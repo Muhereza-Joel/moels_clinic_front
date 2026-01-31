@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Support\Enums\Platform;
+use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -30,7 +32,6 @@ class DashboardPanelProvider extends PanelProvider
             ->default()
             ->id('clinika')
             ->path('clinika')
-            ->spa()
             ->sidebarWidth('16rem')
             ->databaseTransactions()
             ->simplePageMaxContentWidth(MaxWidth::Small)
@@ -39,7 +40,7 @@ class DashboardPanelProvider extends PanelProvider
             ->brandLogo(fn() => view('filament.dashboard.logo'))
             ->brandLogoHeight('auto')
             ->colors([
-                'primary' => Color::Teal,
+                'primary' => Color::Sky,
             ])
             ->theme(
                 asset('build/css/filament/style2.css'),
@@ -52,6 +53,8 @@ class DashboardPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('15s')
             ->navigationGroups([
                 'Sales Management',
                 'Inventory Management',
@@ -77,13 +80,20 @@ class DashboardPanelProvider extends PanelProvider
                 model: Organization::class,
                 slugAttribute: 'slug',
             )
-            ->tenantMenu(true)
+            ->tenantMenu(false)
             ->tenantMiddleware([
                 \BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant::class,
             ], isPersistent: true)
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->globalSearchFieldSuffix(fn(): ?string => match (Platform::detect()) {
+                Platform::Windows, Platform::Linux => 'CTRL+K',
+                Platform::Mac => '⌘K',
+                default => null,
+            })
             ->plugins(
                 [
                     \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                    GlobalSearchModalPlugin::make(),
                     BreezyCore::make()
                         ->myProfile(
                             shouldRegisterUserMenu: true, // Sets the 'account' link in the panel User Menu (default = true)

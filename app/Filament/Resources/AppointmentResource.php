@@ -23,6 +23,54 @@ class AppointmentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
     protected static ?int $navigationSort = 2;
 
+    public static function getGlobalSearchResultTitle($record): string
+    {
+        return "Appt #{$record->sequence} — {$record->patient->full_name}";
+    }
+
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'sequence',
+            'status',
+            'scheduled_start',
+            'patient.first_name',
+            'patient.last_name',
+            'patient.phone',
+            'doctor.user.name',
+        ];
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            collect([
+                $record->scheduled_start?->format('d M Y H:i'),
+                $record->doctor?->user?->name,
+                ucfirst($record->status),
+            ])->filter()->join(' · ')
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()
+            ->with([
+                'patient:id,first_name,last_name,phone,mrn',
+                'doctor.user:id,name',
+            ])
+            ->whereBetween('scheduled_start', [
+                now()->subDays(30), // past 30 days
+                now()->addDays(30), // next 30 days
+            ])
+            ->orderByDesc('scheduled_start');
+    }
+
+
+
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -119,7 +167,18 @@ class AppointmentResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->header(view('filament.tables.appointment-status-legend'))
             ->defaultSort('created_at', 'desc')
+            ->recordClasses(fn($record) => match ($record->status) {
+                'pending'     => 'appointment-row-pending appointment-row-hover',
+                'confirmed'   => 'appointment-row-confirmed appointment-row-hover',
+                'checked_in'  => 'appointment-row-checked-in appointment-row-hover',
+                'completed'   => 'appointment-row-completed appointment-row-hover',
+                'cancelled'   => 'appointment-row-cancelled appointment-row-hover',
+                'no_show'     => 'appointment-row-no-show appointment-row-hover',
+                default       => null,
+            })
+
             ->columns([
 
                 Tables\Columns\TextColumn::make('sequence')

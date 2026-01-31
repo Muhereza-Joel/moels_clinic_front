@@ -88,4 +88,9 @@ class Doctor extends BaseModel
             return $map[$attributes['specialty']] ?? ucfirst($attributes['specialty']);
         });
     }
+
+    public function getDisplayNameAttribute()
+    {
+        return $this->user?->name . ' (' . $this->specialty . ')';
+    }
 }

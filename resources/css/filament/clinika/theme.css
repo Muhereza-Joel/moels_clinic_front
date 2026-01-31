@@ -2,6 +2,96 @@
 
 @config 'tailwind.config.js';
 
+/* Sidebar start */
+/* Sidebar scrollbar styling */
+.fi-sidebar {
+    background-color: #0c1b1df2;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #cbd5e1 #edf6fc; /* thumb | track */
+}
+
+.fi-sidebar-item-label {
+    color: white !important;
+}
+
+.fi-sidebar-nav-tenant-menu-ctn {
+    color: white !important;
+    background-color: #071011f2 !important;
+}
+
+.fi-sidebar-item.fi-active.fi-sidebar-item-active .fi-sidebar-item-label {
+    color: rgb(14, 13, 13) !important;
+}
+
+.dark .fi-sidebar-item.fi-active.fi-sidebar-item-active .fi-sidebar-item-label {
+    color: rgb(249, 245, 245) !important;
+}
+
+/* Chrome, Edge, Safari */
+.fi-sidebar::-webkit-scrollbar {
+    width: 8px; /* adjust scrollbar width */
+}
+
+.fi-sidebar::-webkit-scrollbar-track {
+    background: #edf6fc; /* track color */
+}
+
+.fi-sidebar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1; /* thumb color (slightly darker) */
+    border-radius: 8px;
+    border: 2px solid #edf6fc; /* blends into track */
+}
+
+/* Dark mode sidebar scrollbar */
+.dark .fi-sidebar {
+    background-color: #0e0e0e;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #4b5563 #1a1d23; /* thumb | track */
+}
+
+/* Chrome, Edge, Safari */
+.dark .fi-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dark .fi-sidebar::-webkit-scrollbar-track {
+    background: #1a1d23; /* track = dark background */
+}
+
+.dark .fi-sidebar::-webkit-scrollbar-thumb {
+    background-color: #4b5563; /* thumb = mid-gray for visibility */
+    border-radius: 8px;
+    border: 2px solid #1a1d23; /* blends into track */
+}
+
+/* Active item */
+.fi-sidebar-item.fi-active {
+    color: #100f0f !important;
+}
+.fi-sidebar-item.fi-active.fi-sidebar-item-active a {
+    background-color: #ffffff !important;
+    color: #100f0f !important;
+}
+.dark .fi-sidebar-item.fi-active.fi-sidebar-item-active a {
+    background-color: #1f1e1e !important;
+    color: #fff !important;
+}
+
+/* Hover */
+.fi-sidebar-item a:hover {
+    background-color: #0c1b1df2 !important;
+    color: #fafafa !important;
+}
+.dark .fi-sidebar-item a:hover {
+    background-color: #1a1a2e !important;
+    color: #fff !important;
+}
+/* Sidebar end */
+
+.fi-main {
+    padding: 8px !important;
+}
+
 /* -------------------------------------------------
  | Invoice row status colors (rows)
  -------------------------------------------------*/
@@ -64,4 +154,282 @@
 /* Void */
 .invoice-legend-void {
     @apply bg-red-500 border-red-600;
+}
+
+/* -------------------------------------------------
+ | Visit row status colors (rows)
+ -------------------------------------------------*/
+
+.visit-row-open {
+    @apply bg-blue-50 dark:bg-blue-900/40 dark:border-l-4 dark:border-blue-500;
+}
+
+.visit-row-finalized {
+    @apply bg-green-50 dark:bg-green-900/40 dark:border-l-4 dark:border-green-500;
+}
+
+.visit-row-cancelled {
+    @apply bg-red-50 dark:bg-red-900/40 dark:border-l-4 dark:border-red-500;
+}
+
+.visit-row-hover {
+    @apply transition-colors duration-150
+           hover:bg-opacity-80
+           dark:hover:bg-opacity-90;
+}
+
+/* -------------------------------------------------
+ | Visit status legend dots
+ | Reuses same color intent as rows
+ -------------------------------------------------*/
+
+.visit-legend-dot {
+    @apply h-3 w-3 rounded-full border;
+}
+
+/* Open */
+.visit-legend-open {
+    @apply bg-blue-500 border-blue-600;
+}
+
+/* Finalized */
+.visit-legend-finalized {
+    @apply bg-green-500 border-green-600;
+}
+
+/* Cancelled */
+.visit-legend-cancelled {
+    @apply bg-red-500 border-red-600;
+}
+
+/* -------------------------------------------------
+ | LabOrder row status colors (rows)
+ -------------------------------------------------*/
+
+.laborder-row-ordered {
+    @apply bg-yellow-50 dark:bg-yellow-900/40 dark:border-l-4 dark:border-yellow-500;
+}
+
+.laborder-row-in-progress {
+    @apply bg-blue-50 dark:bg-blue-900/40 dark:border-l-4 dark:border-blue-500;
+}
+
+.laborder-row-completed {
+    @apply bg-green-50 dark:bg-green-900/40 dark:border-l-4 dark:border-green-500;
+}
+
+.laborder-row-cancelled {
+    @apply bg-red-50 dark:bg-red-900/40 dark:border-l-4 dark:border-red-500;
+}
+
+.laborder-row-hover {
+    @apply transition-colors duration-150
+           hover:bg-opacity-80
+           dark:hover:bg-opacity-90;
+}
+
+/* -------------------------------------------------
+ | LabOrder status legend dots
+ | Reuses same color intent as rows
+ -------------------------------------------------*/
+
+.laborder-legend-dot {
+    @apply h-3 w-3 rounded-full border;
+}
+
+/* Ordered (Pending) */
+.laborder-legend-ordered {
+    @apply bg-yellow-500 border-yellow-600;
+}
+
+/* In Progress */
+.laborder-legend-in-progress {
+    @apply bg-blue-500 border-blue-600;
+}
+
+/* Completed */
+.laborder-legend-completed {
+    @apply bg-green-500 border-green-600;
+}
+
+/* Cancelled */
+.laborder-legend-cancelled {
+    @apply bg-red-500 border-red-600;
+}
+
+/* -------------------------------------------------
+ | Appointment row status colors (rows)
+ -------------------------------------------------*/
+
+.appointment-row-pending {
+    @apply bg-yellow-50 dark:bg-yellow-900/40 dark:border-l-4 dark:border-yellow-500;
+}
+
+.appointment-row-confirmed {
+    @apply bg-blue-50 dark:bg-blue-900/40 dark:border-l-4 dark:border-blue-500;
+}
+
+.appointment-row-checked-in {
+    @apply bg-indigo-50 dark:bg-indigo-900/40 dark:border-l-4 dark:border-indigo-500;
+}
+
+.appointment-row-completed {
+    @apply bg-green-50 dark:bg-green-900/40 dark:border-l-4 dark:border-green-500;
+}
+
+.appointment-row-cancelled {
+    @apply bg-red-50 dark:bg-red-900/40 dark:border-l-4 dark:border-red-500;
+}
+
+.appointment-row-no-show {
+    @apply bg-gray-100 dark:bg-gray-800/40 dark:border-l-4 dark:border-gray-500;
+}
+
+.appointment-row-hover {
+    @apply transition-colors duration-150
+           hover:bg-opacity-80
+           dark:hover:bg-opacity-90;
+}
+
+/* -------------------------------------------------
+ | Appointment status legend dots
+ | Reuses same color intent as rows
+ -------------------------------------------------*/
+
+.appointment-legend-dot {
+    @apply h-3 w-3 rounded-full border;
+}
+
+/* Pending */
+.appointment-legend-pending {
+    @apply bg-yellow-500 border-yellow-600;
+}
+
+/* Confirmed */
+.appointment-legend-confirmed {
+    @apply bg-blue-500 border-blue-600;
+}
+
+/* Checked In */
+.appointment-legend-checked-in {
+    @apply bg-indigo-500 border-indigo-600;
+}
+
+/* Completed */
+.appointment-legend-completed {
+    @apply bg-green-500 border-green-600;
+}
+
+/* Cancelled */
+.appointment-legend-cancelled {
+    @apply bg-red-500 border-red-600;
+}
+
+/* No Show */
+.appointment-legend-no-show {
+    @apply bg-gray-400 border-gray-500;
+}
+
+/* -------------------------------------------------
+ | Prescription row status colors (rows)
+ -------------------------------------------------*/
+
+.prescription-row-draft {
+    @apply bg-gray-50 dark:bg-gray-900 dark:border-l-4 dark:border-gray-500;
+}
+
+.prescription-row-issued {
+    @apply bg-yellow-50 dark:bg-yellow-900/40 dark:border-l-4 dark:border-yellow-500;
+}
+
+.prescription-row-dispensed {
+    @apply bg-blue-50 dark:bg-blue-900/40 dark:border-l-4 dark:border-blue-500;
+}
+
+.prescription-row-cancelled {
+    @apply bg-red-50 dark:bg-red-900/40 dark:border-l-4 dark:border-red-500;
+}
+
+.prescription-row-hover {
+    @apply transition-colors duration-150
+           hover:bg-opacity-80
+           dark:hover:bg-opacity-90;
+}
+
+/* -------------------------------------------------
+ | Prescription status legend dots
+ | Reuses same color intent as rows
+ -------------------------------------------------*/
+
+.prescription-legend-dot {
+    @apply h-3 w-3 rounded-full border;
+}
+
+/* Draft */
+.prescription-legend-draft {
+    @apply bg-gray-400 border-gray-500;
+}
+
+/* Issued */
+.prescription-legend-issued {
+    @apply bg-yellow-500 border-yellow-600;
+}
+
+/* Dispensed */
+.prescription-legend-dispensed {
+    @apply bg-blue-500 border-blue-600;
+}
+
+/* Cancelled */
+.prescription-legend-cancelled {
+    @apply bg-red-500 border-red-600;
+}
+
+/* -------------------------------------------------
+ | StatsOverview card styles
+ -------------------------------------------------*/
+
+.card-users {
+    @apply bg-blue-50 dark:bg-blue-900/40 border-l-4 border-blue-500 
+           transition-colors duration-150 hover:bg-blue-100 dark:hover:bg-blue-800/60;
+}
+
+.card-patients {
+    @apply bg-green-50 dark:bg-green-900/40 border-l-4 border-green-500 
+           transition-colors duration-150 hover:bg-green-100 dark:hover:bg-green-800/60;
+}
+
+.card-visits {
+    @apply bg-indigo-50 dark:bg-indigo-900/40 border-l-4 border-indigo-500 
+           transition-colors duration-150 hover:bg-indigo-100 dark:hover:bg-indigo-800/60;
+}
+
+.card-appointments {
+    @apply bg-yellow-50 dark:bg-yellow-900/40 border-l-4 border-yellow-500 
+           transition-colors duration-150 hover:bg-yellow-100 dark:hover:bg-yellow-800/60;
+}
+
+.card-invoices {
+    @apply bg-gray-50 dark:bg-gray-900 border-l-4 border-gray-500 
+           transition-colors duration-150 hover:bg-gray-100 dark:hover:bg-gray-800/60;
+}
+
+.card-drugs-active {
+    @apply bg-teal-50 dark:bg-teal-900/40 border-l-4 border-teal-500 
+           transition-colors duration-150 hover:bg-teal-100 dark:hover:bg-teal-800/60;
+}
+
+.card-drugs-low-stock {
+    @apply bg-red-50 dark:bg-red-900/40 border-l-4 border-red-500 
+           transition-colors duration-150 hover:bg-red-100 dark:hover:bg-red-800/60;
+}
+
+.card-drugs-expiring {
+    @apply bg-orange-50 dark:bg-orange-900/40 border-l-4 border-orange-500 
+           transition-colors duration-150 hover:bg-orange-100 dark:hover:bg-orange-800/60;
+}
+
+.card-drugs-controlled {
+    @apply bg-purple-50 dark:bg-purple-900/40 border-l-4 border-purple-500 
+           transition-colors duration-150 hover:bg-purple-100 dark:hover:bg-purple-800/60;
 }

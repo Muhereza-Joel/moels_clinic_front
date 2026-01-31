@@ -20,47 +20,54 @@ class StatsOverview extends BaseWidget
 
         return [
             Stat::make('User Accounts', User::where('organization_id', $orgId)->count())
-                ->icon('heroicon-o-users'),
+                ->icon('heroicon-o-users')
+                ->extraAttributes(['class' => 'card-users']),
 
             Stat::make('All Patients', Patient::where('organization_id', $orgId)->count())
-                ->icon('heroicon-o-user-group'),
+                ->icon('heroicon-o-user-group')
+                ->extraAttributes(['class' => 'card-patients']),
 
             Stat::make('Visits Today', Visit::where('organization_id', $orgId)
                 ->whereDate('created_at', now())
                 ->count())
-                ->icon('heroicon-o-clipboard-document-check'),
-
+                ->icon('heroicon-o-clipboard-document-check')
+                ->extraAttributes(['class' => 'card-visits']),
 
             Stat::make('Pending Appointments', Appointment::where('organization_id', $orgId)
                 ->where('status', 'pending')
                 ->count())
-                ->icon('heroicon-o-calendar-days'),
+                ->icon('heroicon-o-calendar-days')
+                ->extraAttributes(['class' => 'card-appointments']),
 
             Stat::make('Draft Invoices', Invoice::where('organization_id', $orgId)
                 ->where('status', 'draft')
                 ->count())
-                ->icon('heroicon-o-document-text'),
+                ->icon('heroicon-o-document-text')
+                ->extraAttributes(['class' => 'card-invoices']),
 
-            // 🔹 Drug-related stats
             Stat::make('Active Drugs', Drug::where('organization_id', $orgId)
                 ->active()
                 ->count())
-                ->icon('heroicon-o-beaker'),
+                ->icon('heroicon-o-beaker')
+                ->extraAttributes(['class' => 'card-drugs-active']),
 
             Stat::make('Low Stock Drugs', Drug::where('organization_id', $orgId)
                 ->lowStock()
                 ->count())
-                ->icon('heroicon-o-exclamation-triangle'),
+                ->icon('heroicon-o-exclamation-triangle')
+                ->extraAttributes(['class' => 'card-drugs-low-stock']),
 
             Stat::make('Expiring Soon (30 days)', Drug::where('organization_id', $orgId)
                 ->expiringSoon(30)
                 ->count())
-                ->icon('heroicon-o-clock'),
+                ->icon('heroicon-o-clock')
+                ->extraAttributes(['class' => 'card-drugs-expiring']),
 
             Stat::make('Controlled Substances', Drug::where('organization_id', $orgId)
                 ->controlled()
                 ->count())
-                ->icon('heroicon-o-lock-closed'),
+                ->icon('heroicon-o-lock-closed')
+                ->extraAttributes(['class' => 'card-drugs-controlled']),
         ];
     }
 }
